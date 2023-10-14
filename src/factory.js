@@ -11,27 +11,29 @@ function factory(penv = process.env) {
 
   app.use(express.json());
 
-  const cfg = makeConfig(penv);
+  const config = makeConfig(penv);
 
-  const memoryTracker   = new MemoryTracker(cfg);
-  const requestCounter  = new RequestCounter(cfg);
+  const memoryTracker   = new MemoryTracker(config);
+  const requestCounter  = new RequestCounter(config);
   const requestRejector = new RequestRejector({ memoryTracker, requestCounter });
 
   app.use(requestCounter.makeMiddleware());
 
-  // after health check & being busy, is we still receive request, reject it
+  // after health check & being busy, are we still receiving a request; if so, reject it!
   app.use(requestRejector.makeMiddleware());
 
-  const healthCheck = makeHealthCheck({ requestCounter, memoryTracker });
+  const healthCheck = makeHealthCheck({ config, requestCounter, memoryTracker });
   app.get('/health', healthCheck);
 
-  const heavyOp = makeHeavyOp(cfg);
+  const heavyOp = makeHeavyOp(config);
+  app.get('/heavy-op/length/:length/duration/:duration', heavyOp);
+  app.get('/heavy-op/length/:length', heavyOp);
   app.get('/heavy-op', heavyOp);
   app.post('/heavy-op', heavyOp);
 
   return {
     app,
-    cfg,
+    config,
 
     memoryTracker,
     requestCounter,

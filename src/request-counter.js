@@ -6,13 +6,16 @@ class RequestCounter {
 
   makeMiddleware() {
     const _this = this;
+
     function mw(_req, res, next) {
       _this.inc();
+      // after sending the response, decrement the counter
       res.on('finish', () => {
         _this.dec();
       });
       next();
     }
+
     return mw;
   }
 

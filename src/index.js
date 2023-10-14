@@ -5,10 +5,10 @@ require('dotenv').config();
 main();
 
 async function main() {
-  const { app, cfg } = factory(process.env);
+  const { app, config } = factory(process.env);
 
-  app.listen(cfg.httpPort, () => {
-    console.log('ready at', cfg.httpPort);
+  app.listen(config.httpPort, () => {
+    console.log('ready at', config.httpPort);
   });
 
   return app;

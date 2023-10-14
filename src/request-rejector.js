@@ -6,19 +6,21 @@ class RequestRejector {
 
   makeMiddleware() {
     const _this = this;
+
     function mw(_req, res, next) {
       if (_this.isBusy()) {
-        res.status(500).json({ message: 'I am busy, call others' });
+        res.status(500).json({ message: 'I am busy, call others', ts: new Date() });
       } else {
         next();
       }
     }
+
     return mw;
   }
 
   isBusy() {
     const busy = this.requestCounter.isBusy() || this.memoryTracker.isBusy();
-    console.log('RequestRejector', busy);
+    console.log('RequestRejector', { busy });
     return busy;
   }
 }

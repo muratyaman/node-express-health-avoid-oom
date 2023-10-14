@@ -1,17 +1,17 @@
 class MemoryTracker {
-  constructor({ maxMemoryUsageLimit }) {
-    this.maxMemoryUsageLimit = maxMemoryUsageLimit;
+  constructor({ memoryUsageLimit }) {
+    this.memoryUsageLimit = memoryUsageLimit;
   }
 
   memoryUsage() {
     // @see https://nodejs.org/api/process.html#processmemoryusage
-    const mem = process.memoryUsage();
-    console.log('MemoryTracker', mem);
-    return mem.heapUsed;
+    const memory = process.memoryUsage();
+    console.log('MemoryTracker', { memory });
+    return memory.heapUsed;
   }
 
   isBusy() {
-    return this.memoryUsage() > this.maxMemoryUsageLimit;
+    return this.memoryUsage() > this.memoryUsageLimit;
   }
 }
 

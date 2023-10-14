@@ -1,17 +1,28 @@
-const { randomInt, randomStr, waitMs } = require('./utils');
+const { int, randomInt, waitMs, makeRandomObject } = require('./utils');
 
-function makeHeavyOp() {
+function makeHeavyOp({
+  dataLengthMin,
+  dataLengthMax,
+  waitLimitMin,
+  waitLimitMax,
+}) {
 
-  async function heavyOp(_req, res) {
-    const data = [];
-    const limit = randomInt(50000, 100000);
-    let i = 0;
-    do {
-      data.push({ date: new Date(), id: randomInt(), str: randomStr() });
-    } while (i++ < limit);
+  // This function is a heavy operation that takes a long time to complete.
+  async function heavyOp(req, res) {
+    // get optional path params from the request
+    let { length = '0', duration = '0' } = req.params || {};
 
-    // randomly wait for 15-25 seconds
-    await waitMs(randomInt(15000, 25000));
+    // decide on the length of array
+    length = int(length, 0, 0) || randomInt(dataLengthMin, dataLengthMax);
+    const data = Array.from({ length }); // allocate memory once
+
+    // modify items in the array
+    data.forEach((_val, idx) => {
+      data[idx] = makeRandomObject();
+    });
+
+    duration = int(duration, 0, 0) || randomInt(waitLimitMin, waitLimitMax);
+    await waitMs(duration);
 
     return res.json({ data, size: data.length });
   }
