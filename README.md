@@ -1,6 +1,6 @@
 # node-express-health-avoid-oom
 
-Demo service using Node + Express with improved health check to avoid traffic
+Demo service using Node + Express with improved health check to avoid due OOM errors to traffic.
 
 ## requirements
 
