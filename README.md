@@ -24,10 +24,9 @@ Default settings:
 ```ini
 HTTP_PORT="8080"
 
-# we will warn when hit 90% of this limit
-MEMORY_LIMIT_IN_MB="128"
+# this should be lower than Node option for memory limit e.g. 90%
+MEMORY_LIMIT_IN_MB="100"
 
-# we will warn when hit 90% of this limit
 CONCURRENT_REQUEST_LIMIT="100"
 ```
 
@@ -38,6 +37,8 @@ npm run start
 
 # or:
 NODE_OPTIONS=--max-old-space-size=128 node .
+
+# this Node option above is very important
 ```
 
 ## usage
@@ -65,3 +66,7 @@ curl http://localhost:8080/health
 This mechanism can be used by the load balancing system and traffic can be diverted to other service instances. For example; every 10 seconds, the load balancer can run health check, and after 1 "unhealthy" response, it can divert traffic to other hosts. It can also start creating new instances.
 
 The **danger** here is that when the service is marked as unhealthy, it could be destroyed!
+
+Note: we need to adjust load balancer.
+
+At least, we have a **request rejector** middleware that can protect against crashes due to too much memory usage (**Out Of Memory** errors) if we set the parameters correctly. It also works with a **request counter** middleware.

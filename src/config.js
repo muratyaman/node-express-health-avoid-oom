@@ -3,9 +3,9 @@ const { objGetInt } = require('./utils');
 function makeConfig(penv = process.env) {
 
   // 80% => memory usage could be more volatile
-  const memoryThresholdPctg = 0.80;
+  const memoryThresholdPctg = 1; // 0.80;
 
-  const requestThresholdPctg = 0.90;
+  const requestThresholdPctg = 1; // 0.90;
 
   const config = {
     httpPort              : objGetInt(penv, 'HTTP_PORT', '8080'),

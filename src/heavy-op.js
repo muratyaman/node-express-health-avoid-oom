@@ -21,10 +21,19 @@ function makeHeavyOp({
       data[idx] = makeRandomObject();
     });
 
+    // cause increased memory usage first
+    const jsonOutput = JSON.stringify({ data, size: data.length });
+
+    // free up memory; most developers forget this. But we want to cause more memory usage.
+    // data.length = 0;
+
     duration = int(duration, 0, 0) || randomInt(waitLimitMin, waitLimitMax);
     await waitMs(duration);
 
-    return res.json({ data, size: data.length });
+    // JSON.stringify() and sending it will cost more memory!
+    // return res.json({ data, size: data.length });
+
+    res.set('Content-Type', 'application/json').send(jsonOutput);
   }
 
   return heavyOp;
