@@ -24,7 +24,6 @@ Default settings:
 ```ini
 HTTP_PORT="8080"
 
-# this should be lower than Node option for memory limit e.g. 90%
 MEMORY_LIMIT_IN_MB="100"
 
 CONCURRENT_REQUEST_LIMIT="100"
